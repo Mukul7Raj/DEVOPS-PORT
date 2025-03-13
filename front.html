@@ -1,14 +1,17 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevOps Portfolio</title>
+    <title>Interactive DevOps Portfolio</title>
     <style>
         :root {
             --primary: #0f172a;
             --secondary: #1e293b;
             --accent: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
             --text: #f8fafc;
             --text-secondary: #94a3b8;
         }
@@ -17,7 +20,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
@@ -26,17 +29,191 @@
             line-height: 1.6;
         }
         
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
         header {
-            background-color: var(--secondary);
-            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             position: relative;
             overflow: hidden;
         }
         
-        .terminal-header {
+        .floating-circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0));
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(50px, 50px) rotate(360deg); }
+        }
+        
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--accent);
             display: flex;
             align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo-icon {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent), var(--accent-blue));
+            position: relative;
+        }
+        
+        .logo-icon::before {
+            content: ">";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .hero {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: flex-start;
+            max-width: 800px;
+            margin-top: 5rem;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
             margin-bottom: 1rem;
+        }
+        
+        .hero h1 span {
+            color: var(--accent);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero-tagline {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--accent), var(--accent-blue));
+            color: var(--primary);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+        
+        .terminal {
+            width: 100%;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+            margin-top: 2rem;
+        }
+        
+        .terminal-header {
+            background-color: #2d3748;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
         }
         
         .terminal-dots {
@@ -48,21 +225,16 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
+            cursor: pointer;
         }
         
         .dot-red { background-color: #ff5f56; }
         .dot-yellow { background-color: #ffbd2e; }
         .dot-green { background-color: #27c93f; }
         
-        .terminal-title {
-            margin-left: 1rem;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
         .terminal-content {
-            font-family: monospace;
-            margin-bottom: 2rem;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
         }
         
         .line {
@@ -79,420 +251,223 @@
             color: var(--text);
         }
         
-        .typing {
-            border-right: 2px solid var(--accent);
+        .response {
+            color: var(--text-secondary);
+            margin-left: 1rem;
+        }
+        
+        .typing::after {
+            content: '|';
+            display: inline-block;
             animation: blink 1s step-end infinite;
-            white-space: nowrap;
-            overflow: hidden;
         }
         
         @keyframes blink {
-            from, to { border-color: transparent; }
-            50% { border-color: var(--accent); }
+            from, to { opacity: 0; }
+            50% { opacity: 1; }
         }
         
-        .intro {
-            max-width: 800px;
-            margin: 0 auto;
+        .section {
+            padding: 6rem 0;
         }
         
-        h1 {
+        .section-title {
             font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .name {
-            color: var(--accent);
-            font-weight: bold;
-        }
-        
-        .tagline {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
             margin-bottom: 2rem;
-        }
-        
-        nav {
-            background-color: var(--secondary);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: var(--accent);
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-        
-        .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: var(--accent);
-        }
-        
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        section {
-            margin-bottom: 4rem;
-        }
-        
-        h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 0.5rem;
+            position: relative;
             display: inline-block;
         }
         
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-blue));
+            border-radius: 2px;
+        }
+        
         .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .skill {
-            background-color: var(--secondary);
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
         }
         
-        .project-card {
+        .skill-card {
             background-color: var(--secondary);
+            padding: 1.5rem;
             border-radius: 8px;
+            position: relative;
             overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         
-        .project-card:hover {
+        .skill-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
         
-        .project-image {
-            height: 180px;
-            background-color: #334155;
+        .skill-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-blue));
+        }
+        
+        .skill-icon {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(16, 185, 129, 0.1);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        
-        .project-content {
-            padding: 1.5rem;
-        }
-        
-        .project-title {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .project-description {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
             margin-bottom: 1rem;
+            font-size: 1.5rem;
         }
         
-        .project-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+        .skill-name {
+            font-weight: 500;
+            text-align: center;
         }
         
-        .project-tag {
-            background-color: rgba(16, 185, 129, 0.2);
-            color: var(--accent);
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-        
-        .experience-item {
-            margin-bottom: 2rem;
+        .skill-level {
+            width: 100%;
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 1rem;
             position: relative;
-            padding-left: 2rem;
         }
         
-        .experience-item::before {
-            content: "";
+        .skill-progress {
             position: absolute;
             left: 0;
             top: 0;
             height: 100%;
-            width: 2px;
-            background-color: var(--accent);
-        }
-        
-        .experience-item::after {
-            content: "";
-            position: absolute;
-            left: -6px;
-            top: 8px;
-            height: 14px;
-            width: 14px;
-            background-color: var(--accent);
-            border-radius: 50%;
-        }
-        
-        .experience-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-        
-        .experience-company {
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        
-        .experience-date {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
-        .experience-title {
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-        }
-        
-        .experience-description {
-            color: var(--text-secondary);
-        }
-        
-        .contact-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-        
-        .contact-item {
-            background-color: var(--secondary);
-            padding: 1.5rem;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .contact-icon {
-            width: 40px;
-            height: 40px;
-            background-color: rgba(16, 185, 129, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-        }
-        
-        .contact-text {
-            color: var(--text-secondary);
+            background: linear-gradient(90deg, var(--accent), var(--accent-blue));
+            border-radius: 3px;
         }
         
         footer {
             background-color: var(--secondary);
-            padding: 2rem;
+            padding:
+ 2rem 0;
             text-align: center;
             color: var(--text-secondary);
-        }
-        
-        .metrics-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .metric-card {
-            background-color: var(--secondary);
-            padding: 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .metric-value {
-            font-size: 2.5rem;
-            color: var(--accent);
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        
-        .metric-label {
-            color: var(--text-secondary);
-        }
-        
-        @media (max-width: 768px) {
-            header {
-                padding: 1.5rem;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .nav-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .projects-grid,
-            .metrics-container,
-            .contact-info {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="terminal-header">
-            <div class="terminal-dots">
-                <div class="dot dot-red"></div>
-                <div class="dot dot-yellow"></div>
-                <div class="dot dot-green"></div>
+    <div class="nav-container">
+        <nav>
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <span>DevOps</span>
             </div>
-            <div class="terminal-title">terminal — bash — 80×24</div>
-        </div>
-        
-        <div class="terminal-content">
-            <div class="line">
-                <span class="prompt">$</span>
-                <span class="command">whoami</span>
-            </div>
-            <div class="line">
-                <span>DevOps Engineer</span>
-            </div>
-            <div class="line">
-                <span class="prompt">$</span>
-                <span class="command">cat skills.txt</span>
-            </div>
-            <div class="line">
-                <span>Docker, Kubernetes, CI/CD, AWS, Terraform, Ansible, Monitoring, Automation</span>
-            </div>
-            <div class="line">
-                <span class="prompt">$</span>
-                <span class="command typing">welcome to my portfolio</span>
-            </div>
-        </div>
-        
-        <div class="intro">
-            <h1>Hi, I'm <span class="name">Your Name</span></h1>
-            <p class="tagline">DevOps Engineer building reliable infrastructure and automating everything.</p>
-        </div>
-    </header>
-    
-    <nav>
-        <div class="nav-container">
-            <div class="logo">DevOps</div>
             <div class="nav-links">
-                <a href="#about">About</a>
+                <a href="#home">Home</a>
                 <a href="#skills">Skills</a>
                 <a href="#projects">Projects</a>
-                <a href="#experience">Experience</a>
                 <a href="#contact">Contact</a>
             </div>
+        </nav>
+    </div>
+
+    <header id="home">
+        <div class="floating-circles">
+            <div class="circle" style="width: 300px; height: 300px; top: 10%; left: 5%; opacity: 0.2; animation-delay: 0s; animation-duration: 15s;"></div>
+            <div class="circle" style="width: 200px; height: 200px; top: 60%; left: 50%; opacity: 0.15; animation-delay: 2s; animation-duration: 18s;"></div>
+            <div class="circle" style="width: 150px; height: 150px; top: 30%; left: 70%; opacity: 0.1; animation-delay: 4s; animation-duration: 20s;"></div>
         </div>
-    </nav>
-    
-    <main>
-        <section id="about">
-            <h2>About Me</h2>
-            <p>I'm a DevOps Engineer with expertise in building and maintaining scalable, reliable infrastructure. I focus on automating processes, implementing CI/CD pipelines, and ensuring high availability for mission-critical applications. With a background in both development and operations, I bridge the gap between writing code and running systems in production.</p>
-            
-            <div class="metrics-container">
-                <div class="metric-card">
-                    <div class="metric-value">5+</div>
-                    <div class="metric-label">Years Experience</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">99.9%</div>
-                    <div class="metric-label">Uptime Achievement</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">50+</div>
-                    <div class="metric-label">CI/CD Pipelines Built</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">3x</div>
-                    <div class="metric-label">Deployment Frequency Increase</div>
-                </div>
-            </div>
-        </section>
         
-        <section id="skills">
-            <h2>Skills & Technologies</h2>
-            <div class="skills-container">
-                <div class="skill">Docker</div>
-                <div class="skill">Kubernetes</div>
-                <div class="skill">Terraform</div>
-                <div class="skill">AWS</div>
-                <div class="skill">GCP</div>
-                <div class="skill">Azure</div>
-                <div class="skill">CI/CD</div>
-                <div class="skill">Jenkins</div>
-                <div class="skill">GitHub Actions</div>
-                <div class="skill">Ansible</div>
-                <div class="skill">Prometheus</div>
-                <div class="skill">Grafana</div>
-                <div class="skill">ELK Stack</div>
-                <div class="skill">Python</div>
-                <div class="skill">Bash</div>
-                <div class="skill">Git</div>
-                <div class="skill">Linux</div>
-                <div class="skill">Nginx</div>
-            </div>
-        </section>
-        
-        <section id="projects">
-            <h2>Featured Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="/api/placeholder/300/180" alt="Kubernetes Cluster Setup">
+        <div class="container">
+            <div class="hero">
+                <h1>Building <span>Infrastructure</span> that <span>Scales</span></h1>
+                <p class="hero-tagline">DevOps Engineer with a passion for automation, containers, and clean infrastructure</p>
+                
+                <div class="cta-buttons">
+                    <a href="#projects" class="btn btn-primary">View Projects</a>
+                    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+                </div>
+                
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <div class="dot dot-red"></div>
+                            <div class="dot dot-yellow"></div>
+                            <div class="dot dot-green"></div>
+                        </div>
                     </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Multi-Cloud Kubernetes Platform</h3>
-                        <p class="project-description">Designed and implemented a multi-cloud Kubernetes platform with automated failover capabilities across AWS, GCP, and Azure.</p>
-                        <div class="project-tags">
-                            <span class="project-tag">Kubernetes</span>
-                            <span class="project-tag">Terraform</span>
-                            <span class="project-tag">Multi-Cloud</span>
+                    <div class="terminal-content">
+                        <div class="line">
+                            <span class="prompt">$</span>
+                            <span class="command">whoami</span>
+                        </div>
+                        <div class="line">
+                            <span class="response">DevOps Engineer</span>
+                        </div>
+                        <div class="line">
+                            <span class="prompt">$</span>
+                            <span class="command">ls skills/</span>
+                        </div>
+                        <div class="line">
+                            <span class="response">docker  kubernetes  terraform  ansible  ci-cd  aws  monitoring</span>
+                        </div>
+                        <div class="line">
+                            <span class="prompt">$</span>
+                            <span class="command typing">open portfolio.sh</span>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="skills" class="section">
+        <div class="container">
+            <h2 class="section-title">Tech Stack</h2>
+            <div class="skills-container">
+                <div class="skill-card" onclick="this.classList.toggle('active')">
+                    <div class="skill-icon">K</div>
+                    <h3 class="skill-name">Kubernetes</h3>
+                    <div class="skill-level">
+                        <div class="skill-progress" style="width: 92%"></div>
+                    </div>
+                </div>
                 
-                <div class="project-card">
-                    <div class="project-image">
+                <div class="skill-card" onclick="this.classList.toggle('active')">
+                    <div class="skill-icon">D</div>
+                    <h3 class="skill-name">Docker</h3>
+                    <div class="skill-level">
+                        <div class="skill-progress" style="width: 95%"></div>
+                    </div>
+                </div>
+                
+                <div class="skill-card" onclick="this.classList.toggle('active')">
+                    <div class="skill-icon">T</div>
+                    <h3 class="skill-name">Terraform</h3>
+                    <div class="skill-level">
+                        <div class="skill-progress" style="width: 88%"></div>
+                    </div>
+                </div>
+                
+                <div class="skill-card" onclick="this.classList.toggle('active')">
+                    <div class="skill-icon">A</div>
+                    <h3 class="skill-name">Ansible</h3>
+                    <div class="skill-level">
+                        <div class="skill-progress" style="width: 85%"></div>
+                    </div>
+                </div>
+                
+                <div class="skill-card" onclick="this.classList.toggle('active')">
